@@ -36,11 +36,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      - name: Import GPG key
+        run: |
+            echo "${{ secrets.SIGNING_KEY }}" | gpg --import
+            echo "trust" | gpg --command-fd 0 --edit-key 902DE4403743438E trust
+            echo "5"  # set trust level to ultimate
+            echo "y"  # confirm
+            echo "quit"
+        env:
+            GPG_KEY: ${{ secrets.SIGNING_KEY }}
+
       - name: gradle publish
         run: gradle publish
         env:
-         USERNAME: ${{ github.actor }}
-         TOKEN: ${{ secrets.GH_TOKEN }}
+         USERNAME: ${{ secrets.SONATYPE_USER }}
+         PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+         signing.password: ${{ secrets.SIGNING_PASSWORD }}
+         signing.secretKeyRingFile: ${{ secrets.SIGNING_KEY }}
+
 
 
 
