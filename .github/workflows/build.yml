@@ -19,13 +19,13 @@ jobs:
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
       - name: gradle check
-        run: ./gradlew check
+        run: gradle check
 
       - name: gradle run test
-        run: ./gradlew test
+        run: gradle test
 
       - name: gradle build
-        run: ./gradlew build
+        run: gradle build
 
       - name: create release
         uses: softprops/action-gh-release@v1
@@ -37,7 +37,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: gradle publish
-        run: ./gradlew publish
+        run: gradle publish
         env:
          USERNAME: ${{ github.actor }}
          TOKEN: ${{ secrets.GH_TOKEN }}
