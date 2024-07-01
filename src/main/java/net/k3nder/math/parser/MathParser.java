@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MathParser {
     private static final MathParser INSTANCE = new MathParser();
@@ -33,18 +31,15 @@ public class MathParser {
                     .operation(op)
                     .parented(false)
                     .build());
-            if (!(i >= innerOps.size())) innerOps.remove(i);
+            if (i < innerOps.size()) innerOps.remove(i);
         }
         if (innerProbs.size() == 1) return innerProbs.get(0).operate();
-        for (var i = 0; i < innerOps.size(); i+=2) {
-            var op = innerOps.get(i);
-            var proba = innerProbs.get(i).operate();
-            var probb = innerProbs.get(i+1).operate();
-            var str = "" + proba + op.getCharacter() + probb;
-            System.out.println(str);
-            return parse(str);
-        }
-        return null;
+
+        var op = innerOps.get(0);
+        var proba = innerProbs.get(0).operate();
+        var probb = innerProbs.get(1).operate();
+        var str = "" + proba + op.getCharacter() + probb;
+        return parse(str);
     }
     public ProbOp getProbs(String input) {
         var numbers = getNumbers(input);
